@@ -1,19 +1,48 @@
-let buttons = document.querySelector(".buttons");
-let btn = document.querySelectorAll("span");
-let value = document.getElementById("value");
-let toggleBtn = document.querySelectorAll(".toggleBtn");
-let body = document.querySelector("body");
+const buttonsContainer = document.querySelector(".buttons");
+const allButtons = document.querySelectorAll(".buttons span");
+const displayValue = document.getElementById("value");
+const displayEqual = document.getElementById("equal");
 
-for (let i = 0; i < btn.length; i++) {
-  btn[i].addEventListener("click", function () {
-    if (this.innerHTML == "=") {
-      value.innerHTML = eval(value.innerHTML);
-    } else {
-      if (this.innerHTML == "clear") {
-        value.innerHTML = "";
-      } else {
-        value.innerHTML += this.innerHTML;
-      }
-    }
-  });
+displayEqual.addEventListener("click", function () {
+  handleCustomFunction("equal");
+});
+
+buttonsContainer.addEventListener("click", function (event) {
+  const clickedButton = event.target;
+
+  if (clickedButton.tagName === "SPAN") {
+    handleCustomFunction(clickedButton.textContent);
+  }
+});
+
+function handleCustomFunction(buttonContent) {
+  switch (buttonContent) {
+    case "equal":
+      customFunction();
+      break;
+    case "clear":
+      clearDisplay();
+      break;
+    default:
+      updateDisplay(buttonContent);
+  }
+}
+function customFunction() {
+  const expression = displayValue.textContent;
+  try {
+    const sanitizedExpression = expression.replace(/[^-()\d/*+.]/g, "");
+    const result = new Function("return " + sanitizedExpression)();
+    displayValue.textContent = result;
+  } catch (error) {
+    displayValue.textContent = "Error";
+  }
+}
+
+function clearDisplay() {
+  displayValue.textContent = "";
+}
+
+function updateDisplay(content) {
+  console.log("Updating display with content:", content);
+  displayValue.textContent += content;
 }
