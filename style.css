@@ -25,6 +25,7 @@ body {
   display: grid;
 }
 
+
 .calculator .buttons #value {
   position: relative;
   grid-column: span 4;
